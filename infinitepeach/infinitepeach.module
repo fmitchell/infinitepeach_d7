@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Do infinitepeach stuff
+ */
+
+/**
+ * Implementation of hook_menu
+ *
+ * @return array
+ */
+function infinitepeach_menu() {
+  $items['write/book/%node'] = array(
+    'title' => 'Write Book',
+    'description' => 'Create the pages for a book',
+    'page callback' => 'infinitepeach_create_book',
+    'page arguments' => array(2),
+    'access callback' => array('administer content'),
+  );
+  return $items;
+}
+
+/**
+ * Callback for generating all book pieces
+ *
+ * @param object $node
+ */
+function infinitepeach_create_book($node) {
+	$pieces = array(
+		'cover',
+		'css',
+		'images',
+		'nav',
+		'page',
+		'toc',
+		'footer',
+	);
+	foreach ($pieces as $piece) {
+		module_load_include('inc', 'infinitepeach', 'includes/' . $piece);
+		call_user_func('infinitepeach_create_' . $piece, $node);
+	}
+}
