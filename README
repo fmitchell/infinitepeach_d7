@@ -7,4 +7,6 @@ It's purpose is to act as a drop-in to any Drupal 7 installation.
 ToDo's:
 *******
 * Pull in copies of re-used JS
+* Custom fonts: http://www.google.com/webfonts
+* Create overlay of text for captions: http://drupal.org/project/imagecache_actions
 * Zip up all files when done: http://davidwalsh.name/create-zip-php
