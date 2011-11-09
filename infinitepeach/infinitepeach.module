@@ -41,3 +41,8 @@ function infinitepeach_create_book($node) {
 		call_user_func('infinitepeach_create_' . $piece, $node);
 	}
 }
+
+function infinitepeach_get_header($title, $css) {
+	module_load_include('inc', 'infinitepeach', 'templates/header');
+	return infinitepeach_header_common($title, $css);
+}
