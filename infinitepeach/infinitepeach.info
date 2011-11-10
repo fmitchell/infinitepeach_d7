@@ -1,3 +1,4 @@
 name = "Infinite Peach Custom"
+description = "Custom functionality for infinitepeach.com"
 package = "Infinite Peach"
 core = "7.x"
