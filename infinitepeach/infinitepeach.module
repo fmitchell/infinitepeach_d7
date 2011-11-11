@@ -11,12 +11,13 @@
  * @return array
  */
 function infinitepeach_menu() {
-  $items['write/book/%node'] = array(
+  $items['write-book/%node'] = array(
     'title' => 'Write Book',
     'description' => 'Create the pages for a book',
     'page callback' => 'infinitepeach_create_book',
-    'page arguments' => array(2),
-    'access callback' => array('administer content'),
+    'page arguments' => array(1),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_CALLBACK,
   );
   return $items;
 }
@@ -27,6 +28,26 @@ function infinitepeach_menu() {
  * @param object $node
  */
 function infinitepeach_create_book($node) {
+	//create book directory
+	$book_directory = drupal_dirname('public://book');
+	file_prepare_directory($book_directory, FILE_CREATE_DIRECTORY);
+
+	//copy common files
+	$directories = array(
+		'fonts',
+		'images',
+		'js',
+		'styles',
+	);
+	foreach ($directories as $directory) {
+		$source = drupal_get_path('module', 'infinitepeach') . '/templates' . $directory;
+		$destination = 'public://book/' . $directory;
+		infinitepeach_recurse_copy($source, $destination);
+	}
+
+	$dossiers_directory = drupal_dirname('public://book/styles/dossiers');
+	file_prepare_directory($dossiers_directory, FILE_CREATE_DIRECTORY);
+
 	$pieces = array(
 		'cover',
 		'css',
@@ -45,4 +66,22 @@ function infinitepeach_create_book($node) {
 function infinitepeach_get_header($title, $css) {
 	module_load_include('inc', 'infinitepeach', 'templates/header');
 	return infinitepeach_header_common($title, $css);
+}
+
+
+function infinitepeach_recurse_copy($src, $dst) {
+	$dir = opendir($src);
+	$dst = drupal_dirname($dst);
+	file_prepare_directory($dst, FILE_CREATE_DIRECTORY);
+	while(false !== ( $file = readdir($dir))) {
+		if (($file != '.') && ($file != '..')) {
+			if (is_dir($src . '/' . $file)) {
+				infinitepeach_recurse_copy($src . '/' . $file, $dst . '/' . $file);
+			}
+			else {
+				file_unmanaged_copy($src . '/' . $file, $dst . '/' . $file, FILE_EXISTS_REPLACE);
+			}
+		}
+	}
+	closedir($dir);
 }
