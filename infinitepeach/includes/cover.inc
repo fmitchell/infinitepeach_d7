@@ -19,9 +19,13 @@ function infinitepeach_create_cover($node) {
 	$css_file = file_unmanaged_save_data($css, 'public://book/styles/dossiers/cover.css', FILE_EXISTS_REPLACE);
 
 	//cover image (images/cover/$image)
-	@file_unmanaged_copy($cover_img[0]['uri'], 'public://book/images/cover/');
+	file_unmanaged_copy($cover_img[0]['uri'], 'public://book/images/cover/', FILE_EXISTS_REPLACE);
 
-	//cover image thumbnail (images/cover/$image_thumb)
+	//cover image thumbnail (images/cover/thumb/$image_thumb)
+	$cover_thumb = image_style_path('thumbnail', $cover_img[0]['uri']);
+	$thumb_directory = 'public://book/images/cover/thumb';
+	file_prepare_directory($thumb_directory, FILE_CREATE_DIRECTORY);
+	file_unmanaged_copy($cover_thumb, 'public://book/images/cover/thumb', FILE_EXISTS_REPLACE);
 }
 
 function infinitepeach_cover_body() {
@@ -91,4 +95,5 @@ body {
 	only screen and (min-device-pixel-ratio: 2) {
 }
 EOD;
+	return $output;
 }
