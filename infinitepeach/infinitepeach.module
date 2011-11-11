@@ -29,7 +29,7 @@ function infinitepeach_menu() {
  */
 function infinitepeach_create_book($node) {
 	//create book directory
-	$book_directory = drupal_dirname('public://book');
+	$book_directory = 'public://book';
 	file_prepare_directory($book_directory, FILE_CREATE_DIRECTORY);
 
 	//copy common files
@@ -40,12 +40,12 @@ function infinitepeach_create_book($node) {
 		'styles',
 	);
 	foreach ($directories as $directory) {
-		$source = drupal_get_path('module', 'infinitepeach') . '/templates' . $directory;
+		$source = drupal_get_path('module', 'infinitepeach') . '/templates/' . $directory;
 		$destination = 'public://book/' . $directory;
 		infinitepeach_recurse_copy($source, $destination);
 	}
 
-	$dossiers_directory = drupal_dirname('public://book/styles/dossiers');
+	$dossiers_directory = 'public://book/styles/dossiers';
 	file_prepare_directory($dossiers_directory, FILE_CREATE_DIRECTORY);
 
 	$pieces = array(
@@ -71,7 +71,6 @@ function infinitepeach_get_header($title, $css) {
 
 function infinitepeach_recurse_copy($src, $dst) {
 	$dir = opendir($src);
-	$dst = drupal_dirname($dst);
 	file_prepare_directory($dst, FILE_CREATE_DIRECTORY);
 	while(false !== ( $file = readdir($dir))) {
 		if (($file != '.') && ($file != '..')) {
