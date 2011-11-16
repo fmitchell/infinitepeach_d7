@@ -5,7 +5,8 @@
  * Header template html
  */
 
-function infinitepeach_header_common($title, $css) {
+function infinitepeach_header_common($title, $css, $article = TRUE) {
+	$article_js = ($article) ? '<script src="js/jquery.touchSwipe-1.2.1.js" type="text/javascript"></script>' : '<script type="text/javascript" src="js/article-nav.js"></script>';
 	$output = <<< EOD
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:csi="http://www.massimocorner.com/libraries/csi/" lang="de">
@@ -40,11 +41,10 @@ function infinitepeach_header_common($title, $css) {
 <script type="text/javascript" src="js/tmt_core.js"></script>
 <script type="text/javascript" src="js/tmt_net.js"></script>
 <script type="text/javascript" src="js/tmt_csi.js"></script>
-<script type="text/javascript" src="js/article-nav.js"></script>
+$article_js
 
 <!--Mandatory JavaScripts (Uncomment if not used to speed up performance)
 <script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
-<script src="js/jquery.touchSwipe-1.2.1.js" type="text/javascript"></script>
 -->
 
 </head>
