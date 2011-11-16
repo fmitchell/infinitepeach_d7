@@ -37,11 +37,11 @@ function infinitepeach_create_page($node) {
 
 		$html = infinitepeach_get_header($node->title, $cur, TRUE);
 		$html .= '<body>' . infinitepeach_get_navigation($cur, $prev, $next);
-		$html .= infinitepeach_page_body($cur, file_uri_target(image_style_path('column', $image['uri'])));
+		$html .= infinitepeach_page_body($cur, file_uri_target($image['uri']));
 		$html_file = file_unmanaged_save_data($html, 'public://book/' . $cur . '.html', FILE_EXISTS_REPLACE);
 
 		//page css (styles/dossiers/$cur.css)
-		$css = infinitepeach_page_css($cur, file_uri_target(image_style_path('page', $image['uri'])));
+		$css = infinitepeach_page_css($cur, file_uri_target($image['uri']));
 		$css_file = file_unmanaged_save_data($css, 'public://book/styles/dossiers/' . $cur . '.css', FILE_EXISTS_REPLACE);
 
 		$count++;
@@ -67,7 +67,7 @@ function infinitepeach_page_body($cur, $column_img_path) {
 <div class="content-element">
         <!--Starting Headline-->
         <div class="starting-headline">
-              <h1>This is built with <em>Laker</em> Ð <br />  A compendium for building digital magazines with HTML5</h1>
+              <h1>This is built with <em>Laker</em> &mdash; <br />  A compendium for building digital magazines with HTML5</h1>
         </div><!--Div starting headline-->
 </div><!--Div content element-->
 
