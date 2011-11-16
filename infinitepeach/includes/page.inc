@@ -12,33 +12,38 @@ function infinitepeach_create_page($node) {
 	$total = count($images);
 
 	//create page for each image
-	foreach ($images as $image) {
+	foreach ($images as $key => $image) {
+		//skip first, as this is the cover
+		if ($key < 1) {
+			continue;
+		}
 		$cur = infinitepeach_format_number($count);
-		$prev = ($count != 1) ? infinitepeach_format_number($count-=1) : FALSE;
-		$next = ($count != $total) ? infinitepeach_format_number($count+=1) : FALSE;
+		$prev = ($count != 1) ? infinitepeach_format_number($count - 1) : FALSE;
+		$next = ($count != $total) ? infinitepeach_format_number($count + 1) : FALSE;
+		$image_directory = 'public://book/images/dossier-' . $cur;
+
+		//create image derivatives
+		$derivatives = array(
+			'page' => '',
+			'column' => '/column',
+			'toc_thumb' => '/thumb',
+		);
+		foreach ($derivatives as $style => $derivative) {
+			$directory = $image_directory . $derivative;
+			file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+			$style = image_style_load($style);
+			$creation = image_style_create_derivative($style, $image['uri'], $directory . '/' . file_uri_target($image['uri']));
+		}
 
 		$html = infinitepeach_get_header($node->title, $cur, TRUE);
 		$html .= '<body>' . infinitepeach_get_navigation($cur, $prev, $next);
-		$column_img = image_style_path('column', $image['uri']);
-		$html .= infinitepeach_page_body($cur, $image['uri'], $column_img);
+		$html .= infinitepeach_page_body($cur, file_uri_target(image_style_path('column', $image['uri'])));
 		$html_file = file_unmanaged_save_data($html, 'public://book/' . $cur . '.html', FILE_EXISTS_REPLACE);
 
 		//page css (styles/dossiers/$cur.css)
-		$css = infinitepeach_page_css(file_uri_target($image['uri']));
+		$css = infinitepeach_page_css($cur, file_uri_target(image_style_path('page', $image['uri'])));
 		$css_file = file_unmanaged_save_data($css, 'public://book/styles/dossiers/' . $cur . '.css', FILE_EXISTS_REPLACE);
 
-		//all page images (images/$cur/$image)
-		file_unmanaged_copy($image['uri'], 'public://book/images/dossier-' . $cur . '/', FILE_EXISTS_REPLACE);
-
-		$column_directory = 'public://book/images/dossier-' . $cur . '/column';
-		file_prepare_directory($column_directory, FILE_CREATE_DIRECTORY);
-		file_unmanaged_copy($column_img, 'public://book/images/dossier-' . $cur . '/column', FILE_EXISTS_REPLACE);
-
-		//$cur image thumbnail (images/dossier-$cur/thumb/$image_thumb)
-		$page_thumb = image_style_path('thumbnail', $image['uri']);
-		$thumb_directory = 'public://book/images/dossier-' . $cur . '/thumb';
-		file_prepare_directory($thumb_directory, FILE_CREATE_DIRECTORY);
-		file_unmanaged_copy($page_thumb, 'public://book/images/dossier-' . $cur . '/thumb', FILE_EXISTS_REPLACE);
 		$count++;
 	}
 }
@@ -47,7 +52,7 @@ function infinitepeach_format_number($num) {
 	return sprintf("%02d", $num);
 }
 
-function infinitepeach_page_body($cur, $img_path, $column_img_path) {
+function infinitepeach_page_body($cur, $column_img_path) {
 	$output = <<<EOD
 
 <!--Dossier start image-->

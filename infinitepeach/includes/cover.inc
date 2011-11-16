@@ -14,18 +14,23 @@ function infinitepeach_create_cover($node) {
 	$html .= infinitepeach_cover_body();
 	$html_file = file_unmanaged_save_data($html, 'public://book/001.html', FILE_EXISTS_REPLACE);
 
+	$image_directory = 'public://book/images/cover';
+
+	//create image derivatives
+	$derivatives = array(
+		'page' => '',
+		'toc_thumb' => '/thumb',
+	);
+	foreach ($derivatives as $style => $derivative) {
+		$directory = $image_directory . $derivative;
+		file_prepare_directory($directory, FILE_CREATE_DIRECTORY);
+		$style = image_style_load($style);
+		$creation = image_style_create_derivative($style, $cover_img[0]['uri'], $directory . '/' . file_uri_target($cover_img[0]['uri']));
+	}
+
 	//cover css (styles/dossiers/cover.css)
 	$css = infinitepeach_cover_css(file_uri_target($cover_img[0]['uri']));
 	$css_file = file_unmanaged_save_data($css, 'public://book/styles/dossiers/cover.css', FILE_EXISTS_REPLACE);
-
-	//cover image (images/cover/$image)
-	file_unmanaged_copy($cover_img[0]['uri'], 'public://book/images/cover/', FILE_EXISTS_REPLACE);
-
-	//cover image thumbnail (images/cover/thumb/$image_thumb)
-	$cover_thumb = image_style_path('thumbnail', $cover_img[0]['uri']);
-	$thumb_directory = 'public://book/images/cover/thumb';
-	file_prepare_directory($thumb_directory, FILE_CREATE_DIRECTORY);
-	file_unmanaged_copy($cover_thumb, 'public://book/images/cover/thumb', FILE_EXISTS_REPLACE);
 }
 
 function infinitepeach_cover_body() {
