@@ -14,11 +14,11 @@ function infinitepeach_create_page($node) {
 	//create page for each image
 	foreach ($images as $image) {
 		$cur = infinitepeach_format_number($count);
-		$prev = ($count != 1) ? infinitepeach_format_number($count--) : FALSE;
-		$next = ($count != $total) ? infinitepeach_format_number($count++) : FALSE;
+		$prev = ($count != 1) ? infinitepeach_format_number($count-=1) : FALSE;
+		$next = ($count != $total) ? infinitepeach_format_number($count+=1) : FALSE;
 
 		$html = infinitepeach_get_header($node->title, $cur, TRUE);
-		$html = '<body' . infinitepeach_get_navigation($cur, $prev, $next);
+		$html .= '<body>' . infinitepeach_get_navigation($cur, $prev, $next);
 		$column_img = image_style_path('column', $image['uri']);
 		$html .= infinitepeach_page_body($cur, $image['uri'], $column_img);
 		$html_file = file_unmanaged_save_data($html, 'public://book/' . $cur . '.html', FILE_EXISTS_REPLACE);
