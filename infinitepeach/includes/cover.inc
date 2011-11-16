@@ -10,7 +10,7 @@ function infinitepeach_create_cover($node) {
 	$cover_img = field_get_items('node', $node, 'field_image');
 
 	//cover html (001.html)
-	$html = infinitepeach_get_header($node->title, 'cover');
+	$html = infinitepeach_get_header($node->title, 'cover', FALSE);
 	$html .= infinitepeach_cover_body();
 	$html_file = file_unmanaged_save_data($html, 'public://book/001.html', FILE_EXISTS_REPLACE);
 

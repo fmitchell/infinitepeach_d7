@@ -63,9 +63,9 @@ function infinitepeach_create_book($node) {
 	}
 }
 
-function infinitepeach_get_header($title, $css) {
+function infinitepeach_get_header($title, $css, $article = TRUE) {
 	module_load_include('inc', 'infinitepeach', 'templates/header');
-	return infinitepeach_header_common($title, $css);
+	return infinitepeach_header_common($title, $css, $article);
 }
 
 
