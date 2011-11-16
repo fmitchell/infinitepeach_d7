@@ -65,7 +65,7 @@ function infinitepeach_get_header($title, $css, $article = TRUE) {
 
 function infinitepeach_get_navigation($cur, $prev, $next) {
 	module_load_include('inc', 'infinitepeach', 'templates/navigation');
-	return infinitepeach_header_common($cur, $prev, $next);
+	return infinitepeach_navigation_common($cur, $prev, $next);
 }
 
 
