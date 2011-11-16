@@ -50,12 +50,7 @@ function infinitepeach_create_book($node) {
 
 	$pieces = array(
 		'cover',
-		'css',
-		'images',
-		'nav',
 		'page',
-		'toc',
-		'footer',
 	);
 	foreach ($pieces as $piece) {
 		module_load_include('inc', 'infinitepeach', 'includes/' . $piece);
@@ -66,6 +61,11 @@ function infinitepeach_create_book($node) {
 function infinitepeach_get_header($title, $css, $article = TRUE) {
 	module_load_include('inc', 'infinitepeach', 'templates/header');
 	return infinitepeach_header_common($title, $css, $article);
+}
+
+function infinitepeach_get_navigation($cur, $prev, $next) {
+	module_load_include('inc', 'infinitepeach', 'templates/navigation');
+	return infinitepeach_header_common($cur, $prev, $next);
 }
 
 
