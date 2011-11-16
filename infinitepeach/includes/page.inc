@@ -27,8 +27,12 @@ function infinitepeach_create_page($node) {
 		$css = infinitepeach_page_css(file_uri_target($image['uri']));
 		$css_file = file_unmanaged_save_data($css, 'public://book/styles/dossiers/' . $cur . '.css', FILE_EXISTS_REPLACE);
 
-		//page image (images/$cur/$image)
+		//all page images (images/$cur/$image)
 		file_unmanaged_copy($image['uri'], 'public://book/images/dossier-' . $cur . '/', FILE_EXISTS_REPLACE);
+
+		$column_directory = 'public://book/images/dossier-' . $cur . '/column';
+		file_prepare_directory($column_directory, FILE_CREATE_DIRECTORY);
+		file_unmanaged_copy($column_img, 'public://book/images/dossier-' . $cur . '/column', FILE_EXISTS_REPLACE);
 
 		//$cur image thumbnail (images/dossier-$cur/thumb/$image_thumb)
 		$page_thumb = image_style_path('thumbnail', $image['uri']);
@@ -84,7 +88,7 @@ function infinitepeach_page_body($cur, $img_path, $column_img_path) {
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas velit tortor, ullamcorper id laoreet vel, ultricies ut lorem. Curabitur porta orci ut lacus vestibulum porttitor. Suspendisse potenti. Donec sodales ante eu dui molestie euismod ultricies nisl sollicitudin. Phasellus eget mauris eu velit mollis consectetur a in elit. Pellentesque eu lorem nunc. Integer eu elit massa. Morbi vestibulum lacus a quam sagittis pulvinar tristique arcu posuere. Aliquam sollicitudin risus risus, at semper neque. Aliquam rhoncus rhoncus ultrices.</p>
 
       <div class="media-right">
-      <img src="images/dossier-$cur/$column_img_path" /></div>
+      <img src="images/dossier-$cur/column/$column_img_path" /></div>
 
       <p> Aliquam erat volutpat. Aenean in nibh vitae leo placerat viverra. Pellentesque non sapien ac orci fermentum molestie in vitae purus. Cras lacinia turpis nec orci blandit adipiscing. Morbi tempor commodo leo, quis scelerisque risus pretium quis. Cras suscipit magna eget tortor sagittis fringilla. Praesent arcu justo, ultrices eu interdum nec, ornare aliquam urna. Vivamus cursus posuere erat id faucibus.</p>
       <p>Morbi semper ultrices porta. Aenean dignissim, sapien eget sodales mollis, massa urna malesuada elit, sit amet vulputate justo augue in massa. Praesent mattis accumsan blandit. Mauris nec enim ante. Sed fringilla interdum eros, nec lacinia turpis iaculis vel. Vestibulum leo ipsum, consequat a dignissim sit amet, egestas in urna. Donec nisl velit, pulvinar id ullamcorper vitae, imperdiet et leo. Donec ultricies cursus varius. Pellentesque elit arcu, pulvinar in fermentum non, faucibus eu quam. Suspendisse mollis aliquam sagittis. Vestibulum pellentesque accumsan arcu, vitae mattis tellus luctus id. Vivamus sed condimentum leo.</p>
@@ -96,7 +100,7 @@ function infinitepeach_page_body($cur, $img_path, $column_img_path) {
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas velit tortor, ullamcorper id laoreet vel, ultricies ut lorem. Curabitur porta orci ut lacus vestibulum porttitor. Suspendisse potenti. Donec sodales ante eu dui molestie euismod ultricies nisl sollicitudin. Phasellus eget mauris eu velit mollis consectetur a in elit. Pellentesque eu lorem nunc. Integer eu elit massa. Morbi vestibulum lacus a quam sagittis pulvinar tristique arcu posuere. Aliquam sollicitudin risus risus, at semper neque. Aliquam rhoncus rhoncus ultrices.</p>
 
       <div class="media-left">
-      <img src="images/dossier-$cur/$column_img_path" /></div>
+      <img src="images/dossier-$cur/column/$column_img_path" /></div>
 
       <p> Aliquam erat volutpat. Aenean in nibh vitae leo placerat viverra. Pellentesque non sapien ac orci fermentum molestie in vitae purus. Cras lacinia turpis nec orci blandit adipiscing. Morbi tempor commodo leo, quis scelerisque risus pretium quis. Cras suscipit magna eget tortor sagittis fringilla. Praesent arcu justo, ultrices eu interdum nec, ornare aliquam urna. Vivamus cursus posuere erat id faucibus.</p>
       <p>Morbi semper ultrices porta. Aenean dignissim, sapien eget sodales mollis, massa urna malesuada elit, sit amet vulputate justo augue in massa. Praesent mattis accumsan blandit. Mauris nec enim ante. Sed fringilla interdum eros, nec lacinia turpis iaculis vel. Vestibulum leo ipsum, consequat a dignissim sit amet, egestas in urna. Donec nisl velit, pulvinar id ullamcorper vitae, imperdiet et leo. Donec ultricies cursus varius. Pellentesque elit arcu, pulvinar in fermentum non, faucibus eu quam. Suspendisse mollis aliquam sagittis. Vestibulum pellentesque accumsan arcu, vitae mattis tellus luctus id. Vivamus sed condimentum leo.</p>
