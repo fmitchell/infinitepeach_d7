@@ -28,21 +28,31 @@ function infinitepeach_menu() {
  * @param object $node
  */
 function infinitepeach_create_book($node) {
-	//create book directory
 	$book_directory = 'public://book';
+	$source = drupal_get_path('module', 'infinitepeach') . '/templates';
+	//create book directory
 	file_prepare_directory($book_directory, FILE_CREATE_DIRECTORY);
 
-	//copy common files
+	//copy common directories
 	$directories = array(
 		'fonts',
 		'images',
 		'js',
 		'styles',
+		'inc',
 	);
 	foreach ($directories as $directory) {
-		$source = drupal_get_path('module', 'infinitepeach') . '/templates/' . $directory;
-		$destination = 'public://book/' . $directory;
-		infinitepeach_recurse_copy($source, $destination);
+		$directory_source = $source . '/' . $directory;
+		$directory_destination = $book_directory . '/' . $directory;
+		infinitepeach_recurse_copy($directory_source, $directory_destination);
+	}
+
+	//copy common files
+	$files = array(
+		'navigation.htm',
+	);
+	foreach ($files as $file) {
+		file_unmanaged_copy($source . '/' . $file, $book_directory . '/' . $file, FILE_EXISTS_REPLACE);
 	}
 
 	$dossiers_directory = 'public://book/styles/dossiers';
