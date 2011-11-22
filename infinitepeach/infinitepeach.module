@@ -61,6 +61,7 @@ function infinitepeach_create_book($node) {
 	$pieces = array(
 		'cover',
 		'page',
+		'toc',
 	);
 	foreach ($pieces as $piece) {
 		module_load_include('inc', 'infinitepeach', 'includes/' . $piece);
@@ -93,4 +94,8 @@ function infinitepeach_recurse_copy($src, $dst) {
 		}
 	}
 	closedir($dir);
+}
+
+function infinitepeach_format_number($num) {
+	return sprintf("%02d", $num);
 }

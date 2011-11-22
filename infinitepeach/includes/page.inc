@@ -48,10 +48,6 @@ function infinitepeach_create_page($node) {
 	}
 }
 
-function infinitepeach_format_number($num) {
-	return sprintf("%02d", $num);
-}
-
 function infinitepeach_page_body($cur, $column_img_path) {
 	$output = <<<EOD
 
