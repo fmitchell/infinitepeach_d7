@@ -11,7 +11,7 @@
  * @return array
  */
 function infinitepeach_menu() {
-  $items['write-book/%node'] = array(
+  $items['create-book/%node'] = array(
     'title' => 'Write Book',
     'description' => 'Create the pages for a book',
     'page callback' => 'infinitepeach_create_book',
@@ -19,7 +19,50 @@ function infinitepeach_menu() {
     'access arguments' => array('administer site configuration'),
     'type' => MENU_CALLBACK,
   );
+  $items['my-books'] = array(
+  	'title' => 'My Books',
+    'description' => 'A list of books created.',
+    'page callback' => 'infinitepeach_my_books',
+    'access arguments' => array('create book content'),
+    'type' => MENU_NORMAL_ITEM,
+  );
   return $items;
+}
+
+function infinitepeach_my_books($uid = NULL) {
+	global $user;
+
+	if (!isset($uid)) {
+		$uid = $user->uid;
+	}
+
+	$query = new EntityFieldQuery();
+	$query
+    ->entityCondition('entity_type', 'node')
+    ->propertyCondition('uid', $uid)
+    ->propertyOrderBy('created', 'DESC')
+    ->pager(10);
+
+  $result = $query->execute();
+  $content = array();
+
+  if (empty($result)) {
+    $content['nodes']['#markup'] = t('No books created. Create one!');
+  }
+  else {
+    $content['nodes'] = array(
+      '#type' => 'container',
+      '#attributes' => array(
+        'class' => array('teaser-list'),
+      ),
+    );
+    foreach ($result['node'] as $node) {
+      $node = node_load($node->nid);
+      $content['nodes'][$node->nid] = node_view($node, 'teaser');
+    }
+  }
+
+  return $content;
 }
 
 /**
@@ -78,7 +121,6 @@ function infinitepeach_get_navigation($cur, $prev, $next) {
 	module_load_include('inc', 'infinitepeach', 'templates/navigation');
 	return infinitepeach_navigation_common($cur, $prev, $next);
 }
-
 
 function infinitepeach_recurse_copy($src, $dst) {
 	$dir = opendir($src);
