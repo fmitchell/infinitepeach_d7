@@ -5,7 +5,7 @@
  * Create table of contents piece
  */
 
-function infinitepeach_create_toc($node) {
+function infinitepeach_create_toc($node, $book_directory) {
 	$title = $node->title;
 	$images = field_get_items('node', $node, 'field_image');
 	$count = 1;
@@ -34,7 +34,7 @@ function infinitepeach_create_toc($node) {
 	}
 
 	$html = infinitepeach_toc_body(implode('/n', $toc_entries));
-	$html_file = file_unmanaged_save_data($html, 'public://book/inc/toc.html', FILE_EXISTS_REPLACE);
+	$html_file = file_unmanaged_save_data($html, $book_directory . '/inc/toc.html', FILE_EXISTS_REPLACE);
 
 }
 
@@ -52,21 +52,6 @@ EOD;
 
 function infinitepeach_toc_body($entries) {
 	$output = <<<EOD
-<!--
-#####################################################################
-LAKER Version 1.1 Ð http://www.lakercompendium.com
-#####################################################################
-#####################################################################
-This file contains the table of contents, which will be displayed
-width a doubletap on iOS devices. Furthermore it is displayed on
-desktop screens at the upper right. The different styling is done
-via CSS.
-#####################################################################
-#####################################################################
-#####################################################################
--->
-
-
 <div class="hyphenate">
 
 $entries
@@ -75,4 +60,3 @@ $entries
 EOD;
 	return $output;
 }
-

@@ -5,7 +5,7 @@
  * Create individual book pieces
  */
 
-function infinitepeach_create_page($node) {
+function infinitepeach_create_page($node, $book_directory) {
 	$title = $node->title;
 	$images = field_get_items('node', $node, 'field_image');
 	$count = 1;
@@ -20,7 +20,7 @@ function infinitepeach_create_page($node) {
 		$cur = infinitepeach_format_number($count);
 		$prev = ($count != 1) ? infinitepeach_format_number($count - 1) : FALSE;
 		$next = ($count != $total) ? infinitepeach_format_number($count + 1) : FALSE;
-		$image_directory = 'public://book/images/dossier-' . $cur;
+		$image_directory = $book_directory . '/images/dossier-' . $cur;
 
 		//create image derivatives
 		$derivatives = array(
@@ -38,11 +38,11 @@ function infinitepeach_create_page($node) {
 		$html = infinitepeach_get_header($node->title, $cur, TRUE);
 		$html .= '<body>' . infinitepeach_get_navigation($cur, $prev, $next);
 		$html .= infinitepeach_page_body($cur, file_uri_target($image['uri']));
-		$html_file = file_unmanaged_save_data($html, 'public://book/' . $cur . '.html', FILE_EXISTS_REPLACE);
+		$html_file = file_unmanaged_save_data($html, $book_directory . '/' . $cur . '.html', FILE_EXISTS_REPLACE);
 
 		//page css (styles/dossiers/$cur.css)
 		$css = infinitepeach_page_css($cur, file_uri_target($image['uri']));
-		$css_file = file_unmanaged_save_data($css, 'public://book/styles/dossiers/' . $cur . '.css', FILE_EXISTS_REPLACE);
+		$css_file = file_unmanaged_save_data($css, $book_directory . '/styles/dossiers/' . $cur . '.css', FILE_EXISTS_REPLACE);
 
 		$count++;
 	}
@@ -125,7 +125,7 @@ function infinitepeach_page_css($cur, $img_path) {
 
 .dossier-start-bg {
 	background-image:url(../../images/dossier-$cur/$img_path);
-	}
+}
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
 }

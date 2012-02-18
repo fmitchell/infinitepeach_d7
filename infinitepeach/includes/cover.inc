@@ -5,16 +5,16 @@
  * Create cover piece
  */
 
-function infinitepeach_create_cover($node) {
+function infinitepeach_create_cover($node, $book_directory) {
 	$title = $node->title;
 	$cover_img = field_get_items('node', $node, 'field_image');
 
 	//cover html (001.html)
 	$html = infinitepeach_get_header($node->title, 'cover', FALSE);
 	$html .= infinitepeach_cover_body();
-	$html_file = file_unmanaged_save_data($html, 'public://book/001.html', FILE_EXISTS_REPLACE);
+	$html_file = file_unmanaged_save_data($html, $book_directory . '/001.html', FILE_EXISTS_REPLACE);
 
-	$image_directory = 'public://book/images/cover';
+	$image_directory = $book_directory . '/images/cover';
 
 	//create image derivatives
 	$derivatives = array(
@@ -30,7 +30,7 @@ function infinitepeach_create_cover($node) {
 
 	//cover css (styles/dossiers/cover.css)
 	$css = infinitepeach_cover_css(file_uri_target($cover_img[0]['uri']));
-	$css_file = file_unmanaged_save_data($css, 'public://book/styles/dossiers/cover.css', FILE_EXISTS_REPLACE);
+	$css_file = file_unmanaged_save_data($css, $book_directory . '/styles/dossiers/cover.css', FILE_EXISTS_REPLACE);
 }
 
 function infinitepeach_cover_body() {
