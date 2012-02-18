@@ -66,6 +66,28 @@ function infinitepeach_my_books($uid = NULL) {
 }
 
 /**
+ * Implementation of hook_node_access
+ *
+ * @param string or object $node
+ * @param string $op
+ * @param object $account
+ * @return string
+ */
+function infinitepeach_node_access($node, $op, $account) {
+	$type = is_string($node) ? $node : $node->type;
+	switch ($op) {
+		case 'view':
+		if (($type == 'book') && ($account->uid != $node->uid)) {
+			return NODE_ACCESS_DENY;
+		}
+		else {
+			return NODE_ACCESS_IGNORE;
+		}
+		break;
+	}
+}
+
+/**
  * Callback for generating all book pieces
  *
  * @param object $node
@@ -98,7 +120,7 @@ function infinitepeach_create_book($node) {
 		file_unmanaged_copy($source . '/' . $file, $book_directory . '/' . $file, FILE_EXISTS_REPLACE);
 	}
 
-	$dossiers_directory = 'public://book/styles/dossiers';
+	$dossiers_directory = $book_directory . '/styles/dossiers';
 	file_prepare_directory($dossiers_directory, FILE_CREATE_DIRECTORY);
 
 	$pieces = array(
@@ -108,7 +130,7 @@ function infinitepeach_create_book($node) {
 	);
 	foreach ($pieces as $piece) {
 		module_load_include('inc', 'infinitepeach', 'includes/' . $piece);
-		call_user_func('infinitepeach_create_' . $piece, $node);
+		call_user_func('infinitepeach_create_' . $piece, $node, $book_directory);
 	}
 }
 
